@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import './css/media.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Header from './Components/Header';
+import Home from './Components/Home';
+import Footer from './Components/Footer';
+
+export class App extends Component {
+  onbodyCloseBarClass = () => {
+    let shownElements = document.querySelectorAll('.shown');
+    shownElements.forEach((el) => {
+      if (el.classList.contains("shown"))
+        el.classList.remove("shown")
+    })
+  }
+  render() {
+    return (
+      <div className="App" onClick={this.onbodyCloseBarClass} >
+        <Header />
+        <Home />
+        <Footer />
+      </div>
+    );
+  }
 }
 
 export default App;
