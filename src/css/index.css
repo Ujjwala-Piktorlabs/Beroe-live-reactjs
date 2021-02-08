@@ -660,11 +660,11 @@ input:focus {
 }
 @keyframes animatetop {
     from {
-        top:-300px;
+        top:15px;
         opacity:0;
     } 
     to {
-        top:0;
+        top:75px;
         opacity:1;
     }
 }
@@ -674,11 +674,11 @@ input:focus {
 }
 @keyframes animatebottom {
     from {
-        top:0px;
+        top:75px;
         opacity:1;
     } 
     to {
-        top:-300px;
+        top:15px;
         opacity:0;
     }
 }
@@ -699,6 +699,9 @@ input:focus {
 }
 
 /* carousel */
+.owl-carousel{
+  z-index: 0!important;
+}
 .owl-controls {
     text-align: center;
 }
@@ -737,4 +740,5 @@ input:focus {
 .owl-carousel .owl-item img:last-child{
     width: 20%;
     display: block;
+    object-fit: cover;
 }

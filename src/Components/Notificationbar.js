@@ -1,18 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export class Notificationbar extends Component {
-    render() {
-        return (
-            <div>
-                <div className='noti-card hidden'  onClick={(event) => this.props.TOGGLENOTIBAR(event, 'noti-toggle', false)}  id="noti-toggle">
-                    <div className={`arrow_box ${this.props.notificationToggle}`}>
-                        <h3>Notifications</h3>
-                        <button id="notification-close" className="btn" onClick={(event) => this.props.TOGGLENOTIBAR(event, 'noti-toggle')}>Close &times;</button>
-                    </div>
-                </div>
+function Notificationbar(props) {
+    return (
+        <div className={`noti-card ${props.notiShow}`} onClick={(event) => props.TOGGLENOTIBAR(event,false)} id="noti-toggle">
+            <div className='arrow_box'>
+                <h3>Notifications</h3>
+                <button id="notification-close" className="btn" onClick={props.TOGGLENOTIBAR}>Close &times;</button>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default Notificationbar

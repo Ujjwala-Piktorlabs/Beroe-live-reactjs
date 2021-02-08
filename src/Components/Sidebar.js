@@ -1,15 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export class Sidebar extends Component {
-    render() {
-        return (
-            <div>
-                <div className='sidebar hidden' onClick={(event) => this.props.TOGGLESIDEBAR(event, 'right-menu', false)}  id="right-menu">
-                    <button id="side-bar-close" onClick={(event) => this.props.TOGGLESIDEBAR(event, 'right-menu')} className="btn">Close &times;</button>
-                </div>
-            </div>
-        )
-    }
-}
+const Sidebar = (props) =>
+    <div className={`sidebar ${props.sidebarShow}`} onClick={(event) => props.TOGGLESIDEBAR(event,false)} id="right-menu">
+        <button id="side-bar-close" onClick={props.TOGGLESIDEBAR} className="btn">Close &times;</button>
+    </div>
 
 export default Sidebar

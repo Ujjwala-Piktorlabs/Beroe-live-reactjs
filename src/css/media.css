@@ -105,6 +105,10 @@
     .arrow_box::before {
         top: 124px;
     }
+
+    .owl-carousel .owl-item img:last-child {
+        width: 50px;
+    }
 }
 
 @media (min-width: 551px) and (max-width: 768px) {
@@ -152,6 +156,10 @@
 
     .blog-article .card .container .align-icons .icons-size {
         font-size: 20px;
+    }
+    
+    .owl-carousel .owl-item img:last-child {
+        width: 50px;
     }
 }
 

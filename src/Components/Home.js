@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+
 import Card from './Card';
 import AddIndices from './AddIndices';
 import DeleteIndices from './DeleteIndices';
@@ -28,9 +29,10 @@ const blogs = [
         title: 'WHITEPAPERS',
     }
 ]
-export class Home extends Component {
-    state = {
-        Indices: [
+function Home() {
+    // Indices state
+    const [Indices, setIndices] = useState({
+        In: [
             {
                 image: bargraph,
             },
@@ -46,90 +48,106 @@ export class Home extends Component {
             {
                 image: 'https://source.unsplash.com/random.PNG',
             }
-        ],
-        index: '',
-    }
+        ]
+    })
+    const { In } = Indices
 
-    addToggleIndexClass = (param) => {
-        let id = document.getElementById(param)
-        id.classList.toggle('hidden')
-    }
+    // Index state 
+    const [index, setindex] = useState({
+        index: ''
+    })
 
-    delToggleIndexClass = (param, ind) => {
-        let id = document.getElementById(param)
-        // console.log(id, id.classList.contains('hidden'), ind);
-        if (id.classList.contains('hidden')) {
-            this.setState({ index: ind })
-            console.log(this.state.index);
+    // Add Indices modal state 
+    const [AddModal, setAddModal] = useState({
+        showAddModal: 'hidden'
+    })
+    const { showAddModal } = AddModal
+
+    // Display Add modal
+    const addToggleIndexClass = () => {
+        if (showAddModal === 'shown') {
+            setAddModal({ showAddModal: 'hidden' })
+        } else {
+            setAddModal({ showAddModal: 'shown' })
         }
-        id.classList.toggle('hidden')
     }
 
-    addCarousel = () => {
-        this.setState(previousState => ({
-            Indices: [...previousState.Indices, { image: 'https://source.unsplash.com/random.PNG' }]
+    // Del Indices modal state 
+    const [DelModal, setDelModal] = useState({
+        showDelModal: 'hidden'
+    })
+    const { showDelModal } = DelModal
+
+    const delToggleIndexClass = (ind) => {
+        if (showDelModal === 'shown') {
+            setDelModal({ showDelModal: 'hidden' })
+            setindex({ index: ind })
+        } else {
+            setDelModal({ showDelModal: 'shown' })
+        }
+    }
+
+    // Add Indices to carousel
+    const addCarousel = () => {
+        setIndices(previousState => ({
+            In: [...previousState.In, { image: 'https://source.unsplash.com/random.PNG' }]
         }));
         setTimeout(() => {
-            this.addToggleIndexClass('id01')
-        }, 1000);
+            addToggleIndexClass()
+        }, 500);
     }
 
-    deleteCarousel = () => {
-        this.setState({ Indices: this.state.Indices.splice(this.state.index) });
-        setTimeout(() => {
-            this.delToggleIndexClass('id02')
-        }, 1000);
+    // Delete Indices from carousel
+    const deleteCarousel = (i) => {
+        setIndices({ In: In.splice(i.index) });
+        delToggleIndexClass()
     }
 
-    render() {
-        const options = {
-            responsive: {
-                0: {
-                    items: 1
-                },
-                600: {
-                    items: 2
-                },
-                1000: {
-                    items: 3
-                }
+    // Owl carousel responsive options
+    const options = {
+        responsive: {
+            0: {
+                items: 1
+            },
+            770: {
+                items: 3
             }
         }
-
-        return (
-            <div className="page-content">
-                {/* Section 1 */}
-                <section className="home-section">
-                    <div className="home-info">
-                        <div className="home-img-div">
-                            <img className="home-img" src={building} alt="building" />
-                        </div>
-                        <HomeRightDiv />
-                    </div>
-                    <div className="home-footer">
-                        <p>For DEEPER INSIGHTS in a category, request for a <a href="#">Customised Report.</a></p>
-                        <button className="btn">Get Customised Report</button>
-                    </div>
-                </section>
-                {/* Section 2 */}
-                <section className="graph-section">
-                    <h4>INDICIES</h4>
-                    <div className="fade-line"></div>
-                    <OwlCarousel className='owl-theme' nav dots options={options}>
-                        {this.state.Indices.map((indices, index) => (
-                            <IndicesWhiteCard INDEX={index} INDICES={indices} TOGGLECLASS={this.delToggleIndexClass} />
-                        ))}
-                        <IndicesGreyCard TOGGLECLASS={this.addToggleIndexClass} />
-                    </OwlCarousel>
-                    <AddIndices ADDTOGGLECLASS={this.addToggleIndexClass} ADDCAROUSEL={this.addCarousel} />
-                    <DeleteIndices DELTOGGLECLASS={this.delToggleIndexClass} DELETEINDICES={this.deleteCarousel} />
-                </section>
-                {/* Section 3 */}
-                <section className="blog-article" id="section3">
-                    {blogs.map((blog, index) => (<Card INDEX={index} BLOG={blog} />))}
-                </section>
-            </div>
-        )
     }
+
+    return (
+        <div className="page-content">
+            {/* Section 1 */}
+            <section className="home-section">
+                <div className="home-info">
+                    <div className="home-img-div">
+                        <img className="home-img" src={building} alt="building" />
+                    </div>
+                    <HomeRightDiv />
+                </div>
+                <div className="home-footer">
+                    <p>For DEEPER INSIGHTS in a category, request for a <a href="#">Customised Report.</a></p>
+                    <button className="btn">Get Customised Report</button>
+                </div>
+            </section>
+            {/* Section 2 */}
+            <section className="graph-section">
+                <h4>INDICIES</h4>
+                <div className="fade-line"></div>
+                <OwlCarousel className='owl-theme' autoHeight={true} nav dots {...options}>
+                    {In.map((indices, index) => (
+                        <IndicesWhiteCard INDEX={index} INDICES={indices} DELTOGGLECLASS={delToggleIndexClass} />
+                    ))}
+                    <IndicesGreyCard ADDTOGGLECLASS={addToggleIndexClass} />
+                </OwlCarousel>
+                <AddIndices ADDTOGGLECLASS={addToggleIndexClass} ADDCAROUSEL={addCarousel} showAddModal={showAddModal} />
+                <DeleteIndices DELTOGGLECLASS={delToggleIndexClass} DELETEINDICES={deleteCarousel} INDEX={index} showDelModal={showDelModal} />
+            </section>
+            {/* Section 3 */}
+            <section className="blog-article" id="section3">
+                {blogs.map((blog, index) => (<Card INDEX={index} BLOG={blog} />))}
+            </section>
+        </div>
+    )
 }
 export default Home

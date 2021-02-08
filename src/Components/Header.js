@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Notificationbar from './Notificationbar';
 
@@ -8,80 +8,96 @@ import notification from '../images/notification-icon.png'
 import whitecircle from '../images/white-circle2.png';
 import askberoe from '../images/ask-beroe.png';
 
-export class Header extends Component {
-    navActiveClass = (e) => {
-        let el = document.getElementById(e.target.id)
-        let current = document.querySelectorAll(".nav-active");
-        current.forEach((ele) => {
-            ele.classList.remove('nav-active')
-        })
-        el.classList.add("nav-active")
+function Header() {
+    const [ActiveNav, setActiveNav] = useState({
+        activeNav0: 'nav-active',
+        activeNav1: '',
+        activeNav2: '',
+        activeNav3: '',
+    })
+    const { activeNav0, activeNav1, activeNav2, activeNav3 } = ActiveNav
+
+    const navActiveClass = (id) => {
+        if (id === 'discussions') {
+            setActiveNav({ activeNav0: '', activeNav1: 'nav-active', activeNav2: '', activeNav3: '' })
+        } else if (id === 'interesting-reads') {
+            setActiveNav({ activeNav0: '', activeNav1: '', activeNav2: 'nav-active', activeNav3: '' })
+        } else if (id === 'customised-reports') {
+            setActiveNav({ activeNav0: '', activeNav1: '', activeNav2: '', activeNav3: 'nav-active' })
+        } else {
+            setActiveNav({ activeNav0: 'nav-active', activeNav1: '', activeNav2: '', activeNav3: '' })
+        }
     }
 
-    TOGGLEBAR = (e, param, status = true) => {
-        let x = document.getElementById(param)
-        if (status) {
-            if (x.classList.contains('shown')) {
-                if (param === 'right-menu') {
-                    x.classList.remove('animate-right')
-                    x.classList.add('animate-left')
-                } else if (param === 'noti-toggle') {
-                    x.classList.remove('animate-top')
-                    x.classList.add('animate-bottom')
-                }
+    // state to toggle notification bar
+    const [Noti, setNoti] = useState({
+        notiShow: 'hidden animate-bottom'
+    })
+    const { notiShow } = Noti
+    // Display & toggle notification bar
+    const NOTITOGGLE = (e, divShow = true) => {
+        if (divShow) {
+            if (notiShow === 'hidden animate-bottom') {
+                setNoti({ notiShow: 'shown animate-top' })
             } else {
-                if (param === 'right-menu') {
-                    console.log(param);
-                    x.classList.add('animate-right')
-                    x.classList.remove('animate-left')
-                } else if (param === 'noti-toggle') {
-                    x.classList.add('animate-top')
-                    x.classList.remove('animate-bottom')
-                }
+                setNoti({ notiShow: 'hidden animate-bottom' })
             }
-            x.classList.toggle('shown')
+        }
+        e.stopPropagation()
+    }
+    // state to toggle side bar
+    const [SideBar, setSideBar] = useState({
+        sidebarShow: 'hidden animate-left'
+    })
+    const { sidebarShow } = SideBar
+    // Display & toggle side bar
+    const SIDEBARTOGGLE = (e, divShow = true) => {
+        if (divShow) {
+            if (sidebarShow === 'hidden animate-left') {
+                setSideBar({ sidebarShow: 'shown animate-right' })
+            } else {
+                setSideBar({ sidebarShow: 'hidden animate-left' })
+            }
         }
         e.stopPropagation()
     }
 
-    render() {
-        return (
-            <div id='header'>
-                <nav id="navbar-head">
-                    <div>
-                        <img src={logo} alt="beroe-logo" />
+    return (
+        <div id='header'>
+            <nav id="navbar-head">
+                <div>
+                    <img src={logo} alt="beroe-logo" />
+                </div>
+                <div className="navbar-head-right">
+                    <div id="search-bar">
+                        <input className="search-style" type="text" placeholder="Search" />
+                        <img className="search-img" src={search} alt="search-icon" />
                     </div>
-                    <div className="navbar-head-right">
-                        <div id="search-bar">
-                            <input className="search-style" type="text" placeholder="Search" />
-                            <img className="search-img" src={search} alt="search-icon" />
-                        </div>
-                        <div className="align-span">
-                            <span><a className="align-li" id="dropdown" href="#">
-                                <img src={notification} onClick={(event) => this.TOGGLEBAR(event, 'noti-toggle')} alt="noti-icon" /></a>
-                            </span>
-                            <span><a className="align-li" href="#">
-                                <img src={whitecircle} alt="white-circle" /><b>Hi John!</b></a>
-                            </span>
-                            <span onClick={(event) => this.TOGGLEBAR(event, 'right-menu')} id="ask-beroe"><a className="align-li side-bar-open" href="#">
-                                <img className="side-bar-open" src={askberoe} alt="ask-beroe" /><b className="side-bar-open">Ask Beroe</b></a>
-                            </span>
-                        </div>
+                    <div className="align-span">
+                        <span><a className="align-li" id="dropdown" href="#">
+                            <img src={notification} onClick={NOTITOGGLE} alt="noti-icon" /></a>
+                        </span>
+                        <span><a className="align-li" href="#">
+                            <img src={whitecircle} alt="white-circle" /><b>Hi John!</b></a>
+                        </span>
+                        <span onClick={SIDEBARTOGGLE} id="ask-beroe"><a className="align-li side-bar-open" href="#">
+                            <img className="side-bar-open" src={askberoe} alt="ask-beroe" /><b className="side-bar-open">Ask Beroe</b></a>
+                        </span>
                     </div>
-                </nav>
-                <nav id="navbar-tail">
-                    <ul>
-                        <li><a id="dashboard" className="nav-active" href="#" onClick={this.navActiveClass}>Dashboard</a></li>
-                        <li><a id="discussions" href="#" onClick={this.navActiveClass}>Discussions</a></li>
-                        <li><a id="interesting-reads" href="#" onClick={this.navActiveClass}>Interesting Reads</a></li>
-                    </ul>
-                    <a id="customised-reports" href="#" onClick={this.navActiveClass}>Customised Reports</a>
-                </nav>
-                <Sidebar TOGGLESIDEBAR={this.TOGGLEBAR} />
-                <Notificationbar TOGGLENOTIBAR={this.TOGGLEBAR} />
-            </div>
-        )
-    }
+                </div>
+            </nav>
+            <nav id="navbar-tail">
+                <ul> 
+                    <li><a id="dashboard" className={`${activeNav0}`} href="#" onClick={() => navActiveClass('dashboard')}>Dashboard</a></li>
+                    <li><a id="discussions" className={`${activeNav1}`} href="#" onClick={() => navActiveClass('discussions')}>Discussions</a></li>
+                    <li><a id="interesting-reads" className={`${activeNav2}`} href="#" onClick={() => navActiveClass('interesting-reads')}>Interesting Reads</a></li>
+                </ul>
+                <a id="customised-reports" className={`${activeNav3}`} href="#" onClick={() => navActiveClass('customised-reports')}>Customised Reports</a>
+            </nav>
+            <Sidebar TOGGLESIDEBAR={SIDEBARTOGGLE} sidebarShow={sidebarShow} />
+            <Notificationbar TOGGLENOTIBAR={NOTITOGGLE} notiShow={notiShow} />
+        </div>
+    )
 }
 
 export default Header
