@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { addIndices, delIndices } from '../Actions/carouselActions'
 
 import Card from './Card';
 import AddIndices from './AddIndices';
@@ -8,12 +10,11 @@ import IndicesWhiteCard from './IndicesWhiteCard';
 import IndicesGreyCard from './IndicesGreyCard';
 
 import building from '../images/building.jpg';
-import bargraph from '../images/bar-graph.PNG';
-import lineargraph from '../images/linear-graph.PNG';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+
 
 const blogs = [
     {
@@ -29,28 +30,8 @@ const blogs = [
         title: 'WHITEPAPERS',
     }
 ]
-function Home() {
-    // Indices state
-    const [Indices, setIndices] = useState({
-        In: [
-            {
-                image: bargraph,
-            },
-            {
-                image: lineargraph,
-            },
-            {
-                image: 'https://picsum.photos/seed/picsum/200/300',
-            },
-            {
-                image: 'https://picsum.photos/200',
-            },
-            {
-                image: 'https://source.unsplash.com/random.PNG',
-            }
-        ]
-    })
-    const { In } = Indices
+function Home({ In, addIndices, delIndices }) {
+    // Indices redux state
 
     // Index state 
     const [index, setindex] = useState({
@@ -81,26 +62,27 @@ function Home() {
     const delToggleIndexClass = (ind) => {
         if (showDelModal === 'shown') {
             setDelModal({ showDelModal: 'hidden' })
-            setindex({ index: ind })
         } else {
+            setindex({ index: ind })
             setDelModal({ showDelModal: 'shown' })
         }
     }
 
     // Add Indices to carousel
     const addCarousel = () => {
-        setIndices(previousState => ({
-            In: [...previousState.In, { image: 'https://source.unsplash.com/random.PNG' }]
-        }));
+        addIndices();
         setTimeout(() => {
             addToggleIndexClass()
         }, 500);
     }
 
+
     // Delete Indices from carousel
-    const deleteCarousel = (i) => {
-        setIndices({ In: In.splice(i.index) });
-        delToggleIndexClass()
+    const deleteCarousel = () => {
+        delIndices(index);
+        setTimeout(() => {
+            delToggleIndexClass()
+        }, 500);
     }
 
     // Owl carousel responsive options
@@ -135,8 +117,8 @@ function Home() {
                 <h4>INDICIES</h4>
                 <div className="fade-line"></div>
                 <OwlCarousel className='owl-theme' autoHeight={true} nav dots {...options}>
-                    {In.map((indices, index) => (
-                        <IndicesWhiteCard INDEX={index} INDICES={indices} DELTOGGLECLASS={delToggleIndexClass} />
+                    {In && In.length > 0 && In.map((indices, idx) => (
+                        <IndicesWhiteCard INDEX={idx} INDICES={indices} DELTOGGLECLASS={delToggleIndexClass} />
                     ))}
                     <IndicesGreyCard ADDTOGGLECLASS={addToggleIndexClass} />
                 </OwlCarousel>
@@ -150,4 +132,9 @@ function Home() {
         </div>
     )
 }
-export default Home
+
+const mapStateToProps = state => ({
+    In: state.carousel.In
+})
+
+export default connect(mapStateToProps, { addIndices, delIndices })(Home);

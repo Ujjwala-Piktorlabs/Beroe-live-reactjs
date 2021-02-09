@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 import './css/media.css';
+import { Provider } from 'react-redux';
+import store from './stores'
 
 import Header from './Components/Header';
 import Home from './Components/Home';
@@ -16,11 +18,13 @@ function App() {
   }
 
   return (
-    <div className="App" onClick={onbodyCloseBarClass}>
-      <Header />
-      <Home />
-      <Footer />
-    </div>
+    <Provider store={store}>
+      <div className="App" onClick={onbodyCloseBarClass}>
+        <Header />
+        <Home />
+        <Footer />
+      </div>
+    </Provider>
   );
 
 }
