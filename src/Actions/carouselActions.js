@@ -7,9 +7,9 @@ export const addIndices = () => dispatch => {
     })
 }
 
-export const delIndices = (a) => dispatch => {
+export const delIndices = (delobj) => dispatch => {
     dispatch({
         type: DEL_INDICES,
-        payload: a
+        payload: delobj.index
     })
 }

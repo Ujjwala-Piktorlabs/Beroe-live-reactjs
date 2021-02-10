@@ -30,10 +30,10 @@ export default function (state = initialState, action) {
                 In: [...state.In, action.payload]
             }
         case DEL_INDICES:
-            let indices = state.In.filter((ind, idx) => idx != action.payload.index);
+            let indices = state.In.filter((ind, idx) => idx != action.payload);
             return {
                 ...state,
-                In: indices
+                In: indices   
             }
         default:
             return state;

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { addIndices, delIndices } from '../Actions/carouselActions'
+import { addIndices, delIndices } from '../Actions/carouselActions';
+import axios from 'axios'
 
 import Card from './Card';
 import AddIndices from './AddIndices';
@@ -15,28 +16,17 @@ import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 
-
-const blogs = [
-    {
-        id: 'more1',
-        title: 'BLOG',
-    },
-    {
-        id: 'more2',
-        title: 'ARTICLES',
-    },
-    {
-        id: 'more3',
-        title: 'WHITEPAPERS',
-    }
-]
 function Home({ In, addIndices, delIndices }) {
     // Indices redux state
-
-    // Index state 
+    // Blogs state
     const [index, setindex] = useState({
         index: ''
     })
+    // Index state 
+    const [blogs, setBlogs] = useState({
+        blogitems: []
+    })
+    const {blogitems} = blogs
 
     // Add Indices modal state 
     const [AddModal, setAddModal] = useState({
@@ -59,6 +49,7 @@ function Home({ In, addIndices, delIndices }) {
     })
     const { showDelModal } = DelModal
 
+    // Display Del modal
     const delToggleIndexClass = (ind) => {
         if (showDelModal === 'shown') {
             setDelModal({ showDelModal: 'hidden' })
@@ -75,7 +66,6 @@ function Home({ In, addIndices, delIndices }) {
             addToggleIndexClass()
         }, 500);
     }
-
 
     // Delete Indices from carousel
     const deleteCarousel = () => {
@@ -96,6 +86,16 @@ function Home({ In, addIndices, delIndices }) {
             }
         }
     }
+
+    useEffect(async () => {
+        try {
+            const response = await axios.get('https://api.jsonbin.io/b/6023d3043b303d3d964ea312');
+            setBlogs({ blogitems: response.data.blogs })
+            return blogs
+        } catch (error) {
+            console.error(error);
+        }
+    }, [])
 
     return (
         <div className="page-content">
@@ -127,7 +127,7 @@ function Home({ In, addIndices, delIndices }) {
             </section>
             {/* Section 3 */}
             <section className="blog-article" id="section3">
-                {blogs.map((blog, index) => (<Card INDEX={index} BLOG={blog} />))}
+                {blogitems.map((blog, index) => (<Card INDEX={index} BLOG={blog} />))}
             </section>
         </div>
     )

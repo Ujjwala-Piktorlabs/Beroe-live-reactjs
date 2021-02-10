@@ -9,6 +9,7 @@ import whitecircle from '../images/white-circle2.png';
 import askberoe from '../images/ask-beroe.png';
 
 function Header() {
+    //state for active nav items
     const [ActiveNav, setActiveNav] = useState({
         activeNav0: 'nav-active',
         activeNav1: '',
@@ -16,16 +17,22 @@ function Header() {
         activeNav3: '',
     })
     const { activeNav0, activeNav1, activeNav2, activeNav3 } = ActiveNav
-
+    
+    // toggle active class for nav items
     const navActiveClass = (id) => {
-        if (id === 'discussions') {
-            setActiveNav({ activeNav0: '', activeNav1: 'nav-active', activeNav2: '', activeNav3: '' })
-        } else if (id === 'interesting-reads') {
-            setActiveNav({ activeNav0: '', activeNav1: '', activeNav2: 'nav-active', activeNav3: '' })
-        } else if (id === 'customised-reports') {
-            setActiveNav({ activeNav0: '', activeNav1: '', activeNav2: '', activeNav3: 'nav-active' })
-        } else {
-            setActiveNav({ activeNav0: 'nav-active', activeNav1: '', activeNav2: '', activeNav3: '' })
+        switch (id) {
+            case 'discussions':
+                setActiveNav({ activeNav0: '', activeNav1: 'nav-active', activeNav2: '', activeNav3: '' })
+                break;
+            case 'interesting-reads':
+                setActiveNav({ activeNav0: '', activeNav1: '', activeNav2: 'nav-active', activeNav3: '' })
+                break;
+            case 'customised-reports':
+                setActiveNav({ activeNav0: '', activeNav1: '', activeNav2: '', activeNav3: 'nav-active' })
+                break;
+            default:
+                setActiveNav({ activeNav0: 'nav-active', activeNav1: '', activeNav2: '', activeNav3: '' })
+                break;
         }
     }
 
@@ -34,6 +41,7 @@ function Header() {
         notiShow: 'hidden animate-bottom'
     })
     const { notiShow } = Noti
+
     // Display & toggle notification bar
     const NOTITOGGLE = (e, divShow = true) => {
         if (divShow) {
@@ -45,11 +53,13 @@ function Header() {
         }
         e.stopPropagation()
     }
+
     // state to toggle side bar
     const [SideBar, setSideBar] = useState({
         sidebarShow: 'hidden animate-left'
     })
     const { sidebarShow } = SideBar
+    
     // Display & toggle side bar
     const SIDEBARTOGGLE = (e, divShow = true) => {
         if (divShow) {
@@ -87,7 +97,7 @@ function Header() {
                 </div>
             </nav>
             <nav id="navbar-tail">
-                <ul> 
+                <ul>
                     <li><a id="dashboard" className={`${activeNav0}`} href="#" onClick={() => navActiveClass('dashboard')}>Dashboard</a></li>
                     <li><a id="discussions" className={`${activeNav1}`} href="#" onClick={() => navActiveClass('discussions')}>Discussions</a></li>
                     <li><a id="interesting-reads" className={`${activeNav2}`} href="#" onClick={() => navActiveClass('interesting-reads')}>Interesting Reads</a></li>
